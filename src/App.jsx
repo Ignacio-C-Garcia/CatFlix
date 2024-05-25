@@ -1,39 +1,20 @@
-import Header from "./components/Header";
-import Gallery from "./components/Gallery";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./css/App.css";
-import { useState } from "react";
-import { useEffect } from "react";
-
+import Home from "./components/Home";
+import MovieDetails from "./components/MovieDetails";
 function App() {
-  const [movies, setMovies] = useState([1, 2, 3, 4, 5]);
-  const getMovies = () => {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: process.env.TMDB_token,
-      },
-    };
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Home />,
+    },
+    {
+      path: "/movie/:id",
+      element: <MovieDetails />,
+    },
+  ]);
 
-    try {
-      const fetchResponse = fetch(
-        "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc",
-        options
-      );
-      const response = fetchResponse.json();
-      setMovies(response.results);
-      console.log(movies);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  useEffect(getMovies, []);
-  return (
-    <>
-      <Header></Header>
-      <Gallery {...{ movies }}></Gallery>
-    </>
-  );
+  return <RouterProvider router={router}></RouterProvider>;
 }
 
 export default App;
